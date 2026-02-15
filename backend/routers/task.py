@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import Task
 from schemas import (
+    TaskAnalyzeRequest,
+    TaskAnalyzeResponse,
     TaskDecomposeRequest, 
     TaskDecomposeResponse, 
     TaskCompleteRequest,
@@ -23,6 +25,30 @@ gamification_service = get_gamification_service()
 profile_service = get_profile_service()
 
 
+@router.post("/analyze", response_model=TaskAnalyzeResponse)
+async def analyze_task(request: TaskAnalyzeRequest):
+    """
+    Analyze a task to determine if image context would be helpful.
+    
+    Uses LLM to intelligently determine if the task would benefit from
+    a photo (e.g., cleaning tasks, organizing spaces, fixing items).
+    
+    Returns:
+    - needs_image: Whether an image would help
+    - image_prompt: User-friendly message asking for the image
+    - image_type: Description of what kind of image is needed
+    """
+    try:
+        result = await llm_service.analyze_task_for_image(request.goal)
+        return TaskAnalyzeResponse(
+            needs_image=result["needs_image"],
+            image_prompt=result.get("image_prompt"),
+            image_type=result.get("image_type")
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to analyze task: {str(e)}")
+
+
 @router.post("/decompose", response_model=TaskDecomposeResponse)
 async def decompose_task(request: TaskDecomposeRequest, db: Session = Depends(get_db)):
     """
@@ -30,8 +56,9 @@ async def decompose_task(request: TaskDecomposeRequest, db: Session = Depends(ge
     
     1. PII is masked before any LLM processing
     2. Goal is broken into 2-5 minute MicroWins
-    3. Returns first 5 steps immediately
+    3. Returns 2-10 steps based on task complexity (LLM decides)
     4. Includes complexity score and energy-based timing suggestion
+    5. Optionally accepts image_base64 and image_mime_type for visual context
     """
     # Verify user exists
     user = profile_service.get_user_model(db, request.user_id)
@@ -39,8 +66,17 @@ async def decompose_task(request: TaskDecomposeRequest, db: Session = Depends(ge
         raise HTTPException(status_code=404, detail="User not found")
     
     try:
-        # Decompose the task
-        result = await llm_service.decompose_task(request.goal)
+        # Decompose the task (with or without image)
+        if request.image_base64 and request.image_mime_type:
+            # Use multimodal decomposition with image
+            result = await llm_service.decompose_task_with_image(
+                request.goal,
+                request.image_base64,
+                request.image_mime_type
+            )
+        else:
+            # Standard text-only decomposition
+            result = await llm_service.decompose_task(request.goal)
         
         # Get energy-based suggestion
         hourly_averages = energy_service.calculate_hourly_averages(user.energy_log)

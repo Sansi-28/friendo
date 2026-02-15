@@ -22,22 +22,19 @@ function TaskInput({ onSubmit, loading }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
-        <label className="form-label" htmlFor="goal">
-          What's your goal?
-        </label>
         <textarea
           id="goal"
           className="form-textarea"
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
-          placeholder="Example: Clean my room"
+          placeholder="Enter Task"
           rows={3}
           style={{ minHeight: '80px' }}
         />
       </div>
       
       {/* Quick examples */}
-      <div style={{ marginBottom: '1rem' }}>
+      {/* <div style={{ marginBottom: '1rem' }}>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
           Try one of these:
         </p>
@@ -59,7 +56,7 @@ function TaskInput({ onSubmit, loading }) {
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
       
       <button 
         type="submit" 

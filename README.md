@@ -211,50 +211,38 @@ http://localhost:5173
 
 ## 🐳 Docker Deployment
 
-### Build and Run
+### Quick Start
 
 ```bash
 # Navigate to project root
 cd smart-companion
 
-# Build the image
-docker build -t smart-companion .
+# Generate an encryption key
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 
-# Run the container
-docker run -d \
-  -p 8000:8000 \
-  -e ENCRYPTION_KEY="$(python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())')" \
-  -v smart-companion-data:/app/data \
-  --name smart-companion \
-  smart-companion
+# Copy and configure environment
+cp .env.production .env
+# Edit .env with your ENCRYPTION_KEY and optional GEMINI_API_KEY
+
+# Build and run with Docker Compose
+docker-compose up -d --build
+
+# Check status
+docker-compose ps
+docker-compose logs -f
 ```
 
-### With Docker Compose
+### Production Deployment
 
-Create `docker-compose.yml`:
-```yaml
-version: '3.8'
-services:
-  smart-companion:
-    build: .
-    ports:
-      - "8000:8000"
-    environment:
-      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
-    volumes:
-      - smart-companion-data:/app/data
-    restart: unless-stopped
+For detailed production deployment instructions, see **[DEPLOYMENT.md](DEPLOYMENT.md)** which covers:
 
-volumes:
-  smart-companion-data:
-```
-
-Run:
-```bash
-# Generate key and run
-export ENCRYPTION_KEY=$(python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")
-docker-compose up -d
-```
+- Environment configuration
+- Docker Compose deployment
+- Manual deployment (systemd)
+- Cloud platforms (Azure, AWS, GCP)
+- Nginx reverse proxy with SSL
+- Monitoring and maintenance
+- Troubleshooting guide
 
 ### Access
 ```

@@ -48,6 +48,13 @@ frontend/dist/
 
 # Database
 *.db
+
+# Development workspace copy (duplicated from root)
+smart-companion/
+
+# Log files
+*.log
+api-logs.txt
 *.sqlite
 *.sqlite3
 
@@ -77,6 +84,17 @@ backend/static/
 
 # Data directory
 data/
+
+# API logs for development
+frontend/api-logs.txt
+backend/api-logs.txt
+
+# Environment files (contain secrets)
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.production
 
 # PR description (use content for GitHub/GitLab PR, don't commit)
 PULL_REQUEST.md

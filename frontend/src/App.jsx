@@ -6,6 +6,7 @@ import ProgressBar from './components/ProgressBar'
 import Controls from './components/Controls'
 import EnergyView from './components/EnergyView'
 import VoiceCompanion from './components/VoiceCompanion'
+import ImageUpload from './components/ImageUpload'
 
 // API base URL
 const API_BASE = ''
@@ -33,6 +34,11 @@ function App() {
   
   // Menu state
   const [menuOpen, setMenuOpen] = useState(false)
+  
+  // Image context state
+  const [pendingGoal, setPendingGoal] = useState(null)
+  const [imagePrompt, setImagePrompt] = useState(null)
+  const [showImageUpload, setShowImageUpload] = useState(false)
   
   // Load user on mount
   useEffect(() => {
@@ -130,6 +136,103 @@ function App() {
       }
     } catch (err) {
       console.error('Failed to load active task:', err)
+    }
+  }
+  
+  // Analyze if task needs image context
+  const analyzeTaskForImage = async (goal) => {
+    if (!user) return
+    
+    try {
+      setLoading(true)
+      const res = await fetch(`${API_BASE}/tasks/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ goal })
+      })
+      
+      if (res.ok) {
+        const data = await res.json()
+        if (data.needs_image) {
+          // Store the goal and show image upload prompt
+          setPendingGoal(goal)
+          setImagePrompt(data.image_prompt)
+          setShowImageUpload(true)
+        } else {
+          // No image needed, proceed with decomposition
+          await decomposeTask(goal)
+        }
+      } else {
+        // If analysis fails, proceed without image
+        await decomposeTask(goal)
+      }
+    } catch (err) {
+      console.error('Task analysis error:', err)
+      // Fallback to regular decomposition
+      await decomposeTask(goal)
+    } finally {
+      setLoading(false)
+    }
+  }
+  
+  // Handle image upload decision
+  const handleImageDecision = async (imageData) => {
+    setShowImageUpload(false)
+    
+    if (imageData) {
+      // User provided an image, decompose with it
+      await decomposeTaskWithImage(pendingGoal, imageData.base64, imageData.mimeType)
+    } else {
+      // User skipped, decompose without image
+      await decomposeTask(pendingGoal)
+    }
+    
+    setPendingGoal(null)
+    setImagePrompt(null)
+  }
+  
+  // Decompose task with image context
+  const decomposeTaskWithImage = async (goal, imageBase64, mimeType) => {
+    if (!user) return
+    
+    try {
+      setLoading(true)
+      const res = await fetch(`${API_BASE}/tasks/decompose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user.id,
+          goal: goal,
+          image_base64: imageBase64,
+          image_mime_type: mimeType
+        })
+      })
+      
+      if (res.ok) {
+        const data = await res.json()
+        setActiveTask({
+          id: data.task_id,
+          goal: data.goal,
+          micro_steps: data.micro_steps,
+          completed_steps: 0,
+          total_steps: data.total_steps,
+          complexity_score: data.complexity_score,
+          suggested_energy_window: data.suggested_energy_window
+        })
+        setCurrentStepIndex(0)
+        setCurrentView('task')
+        
+        if (voiceEnabled && data.micro_steps.length > 0) {
+          speak("I've analyzed your image! Let's start with: " + data.micro_steps[0].action)
+        }
+      } else {
+        throw new Error('Failed to decompose task')
+      }
+    } catch (err) {
+      console.error('Decompose with image error:', err)
+      setError('Failed to break down task')
+    } finally {
+      setLoading(false)
     }
   }
   
@@ -408,15 +511,24 @@ function App() {
         </div>
       )}
       
+      {/* Image Upload Modal */}
+      {showImageUpload && (
+        <ImageUpload
+          prompt={imagePrompt}
+          onSubmit={handleImageDecision}
+          onSkip={() => handleImageDecision(null)}
+        />
+      )}
+      
       {/* Main Content */}
-      {currentView === 'home' && !activeTask && (
+      {currentView === 'home' && !activeTask && !showImageUpload && (
         <div className="card">
           <h2 className="card-header">What would you like to do?</h2>
-          <TaskInput onSubmit={decomposeTask} loading={loading} />
+          <TaskInput onSubmit={analyzeTaskForImage} loading={loading} />
           <VoiceCompanion 
             enabled={voiceEnabled}
             onToggle={toggleVoice}
-            onVoiceInput={decomposeTask}
+            onVoiceInput={analyzeTaskForImage}
           />
         </div>
       )}

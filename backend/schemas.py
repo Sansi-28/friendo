@@ -36,10 +36,22 @@ class UserResponse(BaseModel):
 
 # ==================== Task Schemas ====================
 
+class TaskAnalyzeRequest(BaseModel):
+    """Schema for analyzing if a task needs image context."""
+    goal: str = Field(..., min_length=1, max_length=500)
+
+class TaskAnalyzeResponse(BaseModel):
+    """Schema for task analysis response."""
+    needs_image: bool
+    image_prompt: Optional[str] = None  # Prompt to show user asking for image
+    image_type: Optional[str] = None  # e.g., "photo of the space", "screenshot", etc.
+
 class TaskDecomposeRequest(BaseModel):
     """Schema for task decomposition request."""
     user_id: int
     goal: str = Field(..., min_length=1, max_length=500)
+    image_base64: Optional[str] = None  # Base64 encoded image data
+    image_mime_type: Optional[str] = None  # e.g., "image/jpeg", "image/png"
 
 class MicroStep(BaseModel):
     """Schema for a single micro-step."""

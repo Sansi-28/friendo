@@ -972,3 +972,140 @@ p {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   Image Upload Component
+   ============================================ */
+
+.image-upload-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+  backdrop-filter: blur(4px);
+}
+
+.image-upload-modal {
+  max-width: 450px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.image-upload-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.image-upload-icon {
+  font-size: 2rem;
+}
+
+.image-upload-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+}
+
+.image-upload-prompt {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.image-upload-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.image-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.image-preview-container {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.image-preview-clear {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  min-width: auto;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+}
+
+.image-preview-clear:hover {
+  background: rgba(239, 68, 68, 0.8);
+}
+
+.image-upload-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+.image-upload-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  padding: var(--spacing-sm);
+}
+
+.btn-text:hover {
+  color: var(--text-primary);
+  background: transparent;
+}
+
