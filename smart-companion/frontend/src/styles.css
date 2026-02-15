@@ -336,9 +336,21 @@ p {
    Micro-Step View (Main Focus Area)
    ============================================ */
 
+.micro-step-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 350px; /* Fixed minimum height to prevent layout shifts */
+}
+
 .micro-step-container {
   text-align: center;
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px; /* Consistent content area */
 }
 
 .step-number {
@@ -352,15 +364,19 @@ p {
   border-radius: var(--radius-full);
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
 }
 
 .step-action {
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 1.5;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   color: var(--text-primary);
+  min-height: 60px; /* Prevent jumping with varying text lengths */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .step-time {
@@ -372,7 +388,45 @@ p {
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   color: var(--text-secondary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.step-progress {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Fixed button container - always at same position */
+.complete-button-container {
+  padding: var(--spacing-md);
+  background-color: var(--bg-primary);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* ============================================
+   Toast Celebration (Subtle, Non-Intrusive)
+   ============================================ */
+
+.toast-celebration {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: rgba(34, 197, 94, 0.9);
+  color: white;
+  border-radius: var(--radius-lg);
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  animation: toastSlideUp 0.3s ease, toastFadeOut 0.5s ease 2.5s forwards;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
 }
 
 /* ============================================
@@ -610,9 +664,137 @@ p {
 }
 
 /* ============================================
-   Navigation / Tabs
+   Header with Hamburger Menu
    ============================================ */
 
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: var(--spacing-sm);
+}
+
+.app-header h1 {
+  margin: 0;
+  text-align: center;
+}
+
+/* Hamburger Button */
+.hamburger-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: 10px;
+  transition: all 0.2s ease;
+  z-index: 101;
+}
+
+.hamburger-btn:hover {
+  background: var(--accent-primary);
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--spacing-xs);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  z-index: 100;
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.menu-item:hover {
+  background-color: var(--bg-secondary);
+}
+
+.menu-item.active {
+  background-color: var(--accent-primary);
+  color: white;
+}
+
+.menu-item:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Overlay for closing menu */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}
+
+/* Legacy nav-tabs (keep for compatibility) */
 .nav-tabs {
   display: flex;
   gap: var(--spacing-xs);
@@ -674,6 +856,27 @@ p {
 @keyframes celebrate {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.02); }
+}
+
+/* Toast animation keyframes */
+@keyframes toastSlideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes toastFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 /* ============================================

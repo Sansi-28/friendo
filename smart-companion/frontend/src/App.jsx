@@ -31,6 +31,9 @@ function App() {
   // Voice state
   const [voiceEnabled, setVoiceEnabled] = useState(false)
   
+  // Menu state
+  const [menuOpen, setMenuOpen] = useState(false)
+  
   // Load user on mount
   useEffect(() => {
     if (userId) {
@@ -332,46 +335,64 @@ function App() {
     <div className="app-container">
       {renderConfetti()}
       
-      {/* Header */}
-      <header style={{ textAlign: 'center', marginBottom: '1rem' }}>
+      {/* Header with Hamburger Menu */}
+      <header className="app-header">
         <h1>🧠 Smart Companion</h1>
-        <div className="streak-display">
-          <span className="streak-number">🔥 {user.streak_count}</span>
-          <span className="streak-label">streak</span>
-          <div className="badge-container">
-            {user.badges?.map((badge, i) => (
-              <span key={i} className="badge">
-                {badge === 'bronze' && '🥉'}
-                {badge === 'silver' && '🥈'}
-                {badge === 'gold' && '🥇'}
-                {badge === 'diamond' && '💎'}
-              </span>
-            ))}
-          </div>
-        </div>
+        
+        {/* Hamburger Menu Button */}
+        <button 
+          className={`hamburger-btn ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        
+        {/* Dropdown Menu */}
+        {menuOpen && (
+          <nav className="dropdown-menu">
+            <button 
+              className={`menu-item ${currentView === 'home' ? 'active' : ''}`}
+              onClick={() => { setCurrentView('home'); setMenuOpen(false); }}
+            >
+              🏠 Home
+            </button>
+            <button 
+              className={`menu-item ${currentView === 'energy' ? 'active' : ''}`}
+              onClick={() => { setCurrentView('energy'); setMenuOpen(false); }}
+            >
+              ⚡ Energy
+            </button>
+            <button 
+              className={`menu-item ${currentView === 'settings' ? 'active' : ''}`}
+              onClick={() => { setCurrentView('settings'); setMenuOpen(false); }}
+            >
+              ⚙️ Settings
+            </button>
+          </nav>
+        )}
       </header>
       
-      {/* Navigation */}
-      <nav className="nav-tabs">
-        <button 
-          className={`nav-tab ${currentView === 'home' ? 'active' : ''}`}
-          onClick={() => setCurrentView('home')}
-        >
-          🏠 Home
-        </button>
-        <button 
-          className={`nav-tab ${currentView === 'energy' ? 'active' : ''}`}
-          onClick={() => setCurrentView('energy')}
-        >
-          ⚡ Energy
-        </button>
-        <button 
-          className={`nav-tab ${currentView === 'settings' ? 'active' : ''}`}
-          onClick={() => setCurrentView('settings')}
-        >
-          ⚙️ Settings
-        </button>
-      </nav>
+      {/* Streak Display */}
+      <div className="streak-display">
+        <span className="streak-number">🔥 {user.streak_count}</span>
+        <span className="streak-label">streak</span>
+        <div className="badge-container">
+          {user.badges?.map((badge, i) => (
+            <span key={i} className="badge">
+              {badge === 'bronze' && '🥉'}
+              {badge === 'silver' && '🥈'}
+              {badge === 'gold' && '🥇'}
+              {badge === 'diamond' && '💎'}
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      {/* Click outside to close menu */}
+      {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
       
       {/* Error Message */}
       {error && (
@@ -380,9 +401,9 @@ function App() {
         </div>
       )}
       
-      {/* Celebration Message */}
+      {/* Subtle Toast Celebration - fixed position, non-intrusive */}
       {celebration && (
-        <div className="message message-celebration">
+        <div className="toast-celebration">
           {celebration}
         </div>
       )}
