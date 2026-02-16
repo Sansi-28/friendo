@@ -1,7 +1,7 @@
 {
-  "name": "Smart Companion",
-  "short_name": "SmartComp",
-  "description": "Neuro-Inclusive Energy-Adaptive Micro-Wins System",
+  "name": "Friendo",
+  "short_name": "Friendo",
+  "description": "Neuro-Inclusive Executive Function Companion",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a2e",

@@ -48,8 +48,8 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI app
 app = FastAPI(
-    title="Smart Companion API",
-    description="Neuro-Inclusive Energy-Adaptive Micro-Wins System",
+    title="Friendo API",
+    description="Neuro-Inclusive Executive Function Companion",
     version=settings.APP_VERSION,
     lifespan=lifespan,
     docs_url="/api/docs" if settings.DEBUG else None,

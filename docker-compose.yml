@@ -1,9 +1,10 @@
 services:
-  smart-companion:
+  friendo:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: smart-companion
+    image: friendo:latest
+    container_name: friendo
     ports:
       - "${PORT:-8000}:8000"
     env_file:
@@ -11,9 +12,9 @@ services:
     environment:
       - ENVIRONMENT=production
       - DEBUG=false
-      - DATABASE_URL=sqlite:///./data/smart_companion.db
+      - DATABASE_URL=sqlite:///./data/friendo.db
     volumes:
-      - smart-companion-data:/app/data
+      - friendo-data:/app/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
@@ -28,5 +29,5 @@ services:
         max-file: "2"
 
 volumes:
-  smart-companion-data:
+  friendo-data:
     driver: local

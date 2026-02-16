@@ -50,7 +50,7 @@ frontend/dist/
 *.db
 
 # Development workspace copy (duplicated from root)
-smart-companion/
+friendo/
 
 # Log files
 *.log

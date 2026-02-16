@@ -1,6 +1,6 @@
-# Smart Companion - Deployment Guide
+# Friendo - Deployment Guide
 
-This guide covers deploying the Smart Companion application in various environments.
+This guide covers deploying the Friendo application in various environments.
 
 ## Table of Contents
 
@@ -71,7 +71,7 @@ GEMINI_API_KEY=your_gemini_api_key
 PORT=8000
 WORKERS=2
 GEMINI_MODEL=gemini-2.0-flash
-DATABASE_URL=sqlite:///./smart_companion.db
+DATABASE_URL=sqlite:///./friendo.db
 CORS_ORIGINS=*
 ```
 
@@ -194,7 +194,7 @@ server {
 
     # Frontend static files
     location / {
-        root /var/www/smart-companion/frontend/dist;
+        root /var/www/friendo/frontend/dist;
         try_files $uri $uri/ /index.html;
     }
 
@@ -224,20 +224,20 @@ server {
 az login
 
 # Create resource group
-az group create --name smart-companion-rg --location eastus
+az group create --name friendo-rg --location eastus
 
 # Create Container Apps environment
 az containerapp env create \
-  --name smart-companion-env \
-  --resource-group smart-companion-rg \
+  --name friendo-env \
+  --resource-group friendo-rg \
   --location eastus
 
 # Deploy container
 az containerapp create \
-  --name smart-companion \
-  --resource-group smart-companion-rg \
-  --environment smart-companion-env \
-  --image your-registry/smart-companion:latest \
+  --name friendo \
+  --resource-group friendo-rg \
+  --environment friendo-env \
+  --image your-registry/friendo:latest \
   --target-port 8000 \
   --ingress external \
   --env-vars \
@@ -252,8 +252,8 @@ az containerapp create \
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com
 
-docker tag smart-companion:latest YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/smart-companion:latest
-docker push YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/smart-companion:latest
+docker tag friendo:latest YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/friendo:latest
+docker push YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/friendo:latest
 ```
 
 2. Create ECS task definition and service using AWS Console or CLI.
@@ -262,11 +262,11 @@ docker push YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/smart-companion:latest
 
 ```bash
 # Build and push to GCR
-gcloud builds submit --tag gcr.io/YOUR_PROJECT/smart-companion
+gcloud builds submit --tag gcr.io/YOUR_PROJECT/friendo
 
 # Deploy
-gcloud run deploy smart-companion \
-  --image gcr.io/YOUR_PROJECT/smart-companion \
+gcloud run deploy friendo \
+  --image gcr.io/YOUR_PROJECT/friendo \
   --platform managed \
   --region us-central1 \
   --allow-unauthenticated \

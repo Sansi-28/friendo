@@ -1,7 +1,7 @@
-# Smart Companion - Quick Setup Script (Windows PowerShell)
+# Friendo - Quick Setup Script (Windows PowerShell)
 # Run: .\setup.ps1
 
-Write-Host "Smart Companion - Quick Setup" -ForegroundColor Cyan
+Write-Host "Friendo - Quick Setup" -ForegroundColor Cyan
 Write-Host "==============================" -ForegroundColor Cyan
 
 # Check if .env exists

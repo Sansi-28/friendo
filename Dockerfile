@@ -1,6 +1,6 @@
 # ============================================
-# Smart Companion - Optimized Multi-stage Dockerfile
-# Neuro-Inclusive Energy-Adaptive Micro-Wins System
+# Friendo - Optimized Multi-stage Dockerfile
+# Neuro-Inclusive Executive Function Companion
 # ============================================
 
 # Stage 1: Build React Frontend with tree-shaking

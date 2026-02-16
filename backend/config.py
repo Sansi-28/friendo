@@ -25,7 +25,7 @@ class Settings:
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./smart_companion.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./friendo.db")
     
     # Encryption key for Fernet (must be 32 url-safe base64-encoded bytes)
     # Generate with: from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())
@@ -48,7 +48,7 @@ class Settings:
     CORS_ORIGINS: List[str] = os.getenv("CORS_ORIGINS", "*").split(",")
     
     # Application
-    APP_NAME: str = "Smart Companion"
+    APP_NAME: str = "Friendo"
     APP_VERSION: str = "1.0.0"
     
     # Rate Limiting (requests per minute)

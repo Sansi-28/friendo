@@ -54,8 +54,8 @@ tests/
 api_logger.py
 vite-api-logger.js
 
-# Smart-companion subfolder (duplicate)
-smart-companion/
+# Friendo subfolder (duplicate)
+friendo/
 
 # OS files
 .DS_Store

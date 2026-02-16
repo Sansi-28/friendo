@@ -15,7 +15,7 @@ function App() {
   // User state
   const [user, setUser] = useState(null)
   const [userId, setUserId] = useState(() => {
-    return localStorage.getItem('smartCompanionUserId')
+    return localStorage.getItem('friendoUserId')
   })
   
   // UI state
@@ -67,7 +67,7 @@ function App() {
         await loadActiveTask(id)
       } else {
         // User not found, clear stored ID
-        localStorage.removeItem('smartCompanionUserId')
+        localStorage.removeItem('friendoUserId')
         setUserId(null)
       }
     } catch (err) {
@@ -91,7 +91,7 @@ function App() {
         const newUser = await res.json()
         setUser(newUser)
         setUserId(newUser.id)
-        localStorage.setItem('smartCompanionUserId', newUser.id)
+        localStorage.setItem('friendoUserId', newUser.id)
         setCurrentView('home')
       } else {
         throw new Error('Failed to create profile')
@@ -638,7 +638,7 @@ function App() {
             <button 
               className="btn"
               onClick={() => {
-                localStorage.removeItem('smartCompanionUserId')
+                localStorage.removeItem('friendoUserId')
                 setUser(null)
                 setUserId(null)
                 setActiveTask(null)

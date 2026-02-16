@@ -1,8 +1,8 @@
 #!/bin/bash
-# Smart Companion - Quick Setup Script (Linux/Mac)
+# Friendo - Quick Setup Script (Linux/Mac)
 # Run: chmod +x setup.sh && ./setup.sh
 
-echo "🚀 Smart Companion - Quick Setup"
+echo "🚀 Friendo - Quick Setup"
 echo "================================"
 
 # Check if .env exists

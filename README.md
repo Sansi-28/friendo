@@ -1,10 +1,10 @@
-# 🧠 Smart Companion
+# 🧠 Friendo
 
-## Neuro-Inclusive Energy-Adaptive Micro-Wins System
+## Neuro-Inclusive Executive Function Companion
 
 A privacy-first, local-first Progressive Web App (PWA) designed to empower neurodiverse users (ADHD, Dyslexia) by transforming overwhelming routines into simple MicroWins, while adapting to energy cycles and maintaining motivation through gamification and voice guidance.
 
-![Smart Companion](https://img.shields.io/badge/Smart-Companion-6366f1?style=for-the-badge)
+![Friendo](https://img.shields.io/badge/Friendo-6366f1?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green?style=flat-square)
 ![React](https://img.shields.io/badge/React-18-61dafb?style=flat-square)
@@ -442,7 +442,7 @@ GET /energy/analysis/{user_id}
 ## 📁 Project Structure
 
 ```
-smart-companion/
+friendo/
 ├── backend/
 │   ├── main.py                 # FastAPI app entry point
 │   ├── database.py             # SQLAlchemy setup
